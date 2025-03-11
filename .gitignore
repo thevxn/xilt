@@ -1,0 +1,13 @@
+input*
+logs*
+*.exe
+*.db
+*.db-journal
+vendor
+dev.sh
+*.log
+cover.*
+.vscode
+
+# Ignores the built executable
+/xilt
