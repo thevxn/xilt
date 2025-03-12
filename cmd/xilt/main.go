@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bufio"
-	"errors"
 	"flag"
-	"io/fs"
 
 	"log"
 	"math"
@@ -15,6 +12,7 @@ import (
 	"go.vxn.dev/xilt/internal/config"
 	"go.vxn.dev/xilt/internal/database"
 	"go.vxn.dev/xilt/internal/parser"
+	"go.vxn.dev/xilt/internal/reader"
 	"go.vxn.dev/xilt/pkg/logger"
 )
 
@@ -85,52 +83,11 @@ func main() {
 
 	l.Debug("batch insert routine spawned...")
 
-	file, err := os.Open(cfg.InputFilePath)
-	if err != nil {
-		if errors.Is(err, fs.ErrNotExist) {
-			l.Printf("error: file '%s' does not exist", cfg.InputFilePath)
-			return
-		} else if errors.Is(err, fs.ErrPermission) {
-			l.Printf("error: insufficient permissions to read file '%s'", cfg.InputFilePath)
-			return
-		} else {
-			l.Printf("error opening file '%s': %v", cfg.InputFilePath, err)
-			return
-		}
-	}
+	// Instantiate a reader which will read from the configured input file and push raw logs into the batchChannel for parsing
+	reader := reader.NewReader(l, cfg)
 
-	l.Debug("log file opened...")
-
-	defer func() {
-		file.Close()
-		l.Debug("log file closed...")
-	}()
-
-	scanner := bufio.NewScanner(file)
-
-	batch := make([]string, 0, cfg.BatchSize)
-
-	l.Println("beginning reading from log file and the parsing process...")
-
-	// Iterate over the lines in the log file and push them into the batch slice until the batch size or EOF is reached
-	for scanner.Scan() {
-		line := scanner.Text()
-		if len(line) > 0 {
-			batch = append(batch, line)
-			if len(batch) == cfg.BatchSize {
-				batchChannel <- batch
-				batch = make([]string, 0, cfg.BatchSize)
-			}
-		}
-	}
-
-	// Push the remaining logs if any
-	if len(batch) > 0 {
-		batchChannel <- batch
-	}
-
-	if err := scanner.Err(); err != nil {
-		l.Println("error reading from file:", err)
+	if err := reader.ReadAndBatch(batchChannel); err != nil {
+		l.Printf("error while reading from log file and batching: %v", err)
 		return
 	}
 
