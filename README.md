@@ -108,7 +108,7 @@ Using the default presets (`batchSize=5000`, `avgLogSize=0.001`, `maxMemUsage=10
 
 ## Build & Run Locally
 
-- `git clone https://github.com/thevxn/log-parser-go`
+- `git clone https://github.com/thevxn/xilt`
 - `go build ./cmd/xilt`
 - `./xilt`
 
