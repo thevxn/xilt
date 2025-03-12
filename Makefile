@@ -22,8 +22,8 @@ push: build
 
 run: 
 	@rm -f logs.db 
-	@go build -o parser ./cmd/xilt/main.go
-	@./parser -i -v logs logs.db
+	@go build -o xilt ./cmd/xilt/main.go
+	@./xilt -i -v logs logs.db
 
 test:
 	@go test -v -coverprofile cover.out ./...
