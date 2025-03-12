@@ -68,7 +68,7 @@ func (r *reader) ReadAndBatch(batchChannel chan<- []string) error {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return err
+		return fmt.Errorf("error reading file '%s': %v", r.cfg.InputFilePath, err)
 	}
 	return nil
 }
