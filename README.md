@@ -76,7 +76,10 @@ The resulting `logs.db` file:
 
 ## Benchmark
 
-Currently, a basic benchmark is available:
+Currently, a basic benchmark is available using the following hardware:
+
+- AMD Ryzen™ 7 5800X3D
+- 32 GB DDR4 RAM
 
 A large log file containing 17 379 453 logs (~1.63 GB in size) takes 1 minute, 55 seconds on average to be parsed and stored in SQLite if not using indexes. Index creation on a table of such size prolongs the duration to ~4 minutes.
 
