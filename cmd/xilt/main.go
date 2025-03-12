@@ -63,7 +63,7 @@ func main() {
 
 	// Spin up routines to parse logs
 	// Max number of routines is equal to the maximum memory usage limit / the average size of a batch, taking into account the configured average log size and  batch size
-	// reservedRoutines = one write routine is running concurrently and at the same time another batch is being put together by reading from the log file, which also has to be taken into account
+	// reservedRoutines are subtracted because one write routine is running concurrently and at the same time another batch is being put together by reading from the log file, which also has to be taken into account
 	routineCount := int(math.Max(1, math.Floor(float64(cfg.MaxMemoryUsageMB)/(cfg.AverageLogSizeMB*float64(cfg.BatchSize)))-reservedRoutines))
 
 	parser, err := parser.NewParser(l, nil)
