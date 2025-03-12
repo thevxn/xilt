@@ -6,7 +6,7 @@ A utility for parsing Common and Combined Log Format (CLF) log files and storing
 
 ### Install
 
-`go get go.vxn.dev/xilt/cmd/xilt@latest`
+`go install go.vxn.dev/xilt/cmd/xilt@latest`
 
 ### Run
 
