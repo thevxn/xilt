@@ -74,7 +74,7 @@ func TestDB_Init(t *testing.T) {
 func TestDB_InitInvalidFilePath(t *testing.T) {
 	config := &config.Config{
 		Verbose:    false,
-		DBFilePath: ":invalidpath",
+		DBFilePath: "invalidpath//....invalidfilename..../test",
 	}
 
 	logger := &mockLogger{}
