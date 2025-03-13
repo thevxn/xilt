@@ -17,6 +17,7 @@ type reader struct {
 	cfg    *config.Config
 }
 
+// NewReader returns a new instance of the Reader struct.
 func NewReader(l logger.Logger, c *config.Config) *reader {
 	return &reader{
 		logger: l,
@@ -24,6 +25,7 @@ func NewReader(l logger.Logger, c *config.Config) *reader {
 	}
 }
 
+// ReadAndBatch reads from the file configured in the Reader struct's config and pushes raw logs into a batch channel for further processing.
 func (r *reader) ReadAndBatch(batchChannel chan<- []string) error {
 	file, err := os.Open(r.cfg.InputFilePath)
 	if err != nil {
