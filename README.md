@@ -1,5 +1,7 @@
 # xilt
 
+[![Go Report Card](https://goreportcard.com/badge/go.vxn.dev/xilt)](https://goreportcard.com/report/go.vxn.dev/xilt) [![Go Reference](https://pkg.go.dev/badge/go.vxn.dev/xilt#readme-usage.svg)](https://pkg.go.dev/go.vxn.dev/xilt#readme-usage)
+
 A utility for parsing Common and Combined Log Format (CLF) log files and storing them in SQLite for further analysis. Built with concurrency in mind.
 
 ## Usage
