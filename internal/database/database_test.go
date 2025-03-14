@@ -1,6 +1,7 @@
 package database
 
 import (
+	"os"
 	"sync"
 	"testing"
 
@@ -69,6 +70,40 @@ func TestDB_Init(t *testing.T) {
 		t.Error("expected 'logs' table to exist, but it does not")
 	}
 
+}
+
+func TestDB_InitTableExists(t *testing.T) {
+	config := &config.Config{
+		Verbose:    false,
+		DBFilePath: "testfile.db",
+	}
+
+	// Remove the created test DB file after the test is finished
+	defer func() {
+		if err := os.Remove("./testfile.db"); err != nil {
+			t.Errorf("error deleting test DB file: %v", err)
+		}
+	}()
+
+	logger := &mockLogger{}
+
+	db := NewDB(logger, config)
+
+	err := db.Init()
+	if err != nil {
+		t.Errorf("Init failed: %v", err)
+	}
+	defer db.Close()
+
+	if db.conn == nil {
+		t.Error("expected db.conn to be non-nil after Init")
+	}
+
+	// Call init again to try and create an existing table again
+	err = db.Init()
+	if err == nil {
+		t.Errorf("expected error, got nil")
+	}
 }
 
 func TestDB_InitInvalidFilePath(t *testing.T) {
