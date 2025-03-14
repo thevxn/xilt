@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func TestLoadDefault(t *testing.T) {
+func TestLoad(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 	args := []string{}
 
@@ -31,7 +31,7 @@ func TestLoadDefault(t *testing.T) {
 	}
 }
 
-func TestLoadWithFlags(t *testing.T) {
+func TestLoad_Flags(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 
 	// Set flags to be tested
@@ -64,7 +64,7 @@ func TestLoadWithFlags(t *testing.T) {
 
 }
 
-func TestLoadWithTwoArgs(t *testing.T) {
+func TestLoad_TwoArgs(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 
 	// Set args to be tested
@@ -91,7 +91,7 @@ func TestLoadWithTwoArgs(t *testing.T) {
 
 }
 
-func TestLoadWithOneArg(t *testing.T) {
+func TestLoad_OneArg(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 
 	// Set args to be tested
@@ -118,7 +118,7 @@ func TestLoadWithOneArg(t *testing.T) {
 
 }
 
-func TestLoadWithInvalidLogFilePath(t *testing.T) {
+func TestLoad_InvalidLogFilePath(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 
 	// Set args to be tested
@@ -131,7 +131,7 @@ func TestLoadWithInvalidLogFilePath(t *testing.T) {
 
 }
 
-func TestLoadWithInvalidDBFilePath(t *testing.T) {
+func TestLoad_InvalidDBFilePath(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 
 	// Set args to be tested
@@ -196,7 +196,7 @@ func TestValidate(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.cfg.Validate()
+			err := tt.cfg.validate()
 			if (err != nil) != tt.expectError {
 				t.Errorf("Validate() error = %v, expectError %v", err, tt.expectError)
 			}
@@ -207,7 +207,7 @@ func TestValidate(t *testing.T) {
 	}
 }
 
-func TestInvalidFlag(t *testing.T) {
+func TestLoad_InvalidFlag(t *testing.T) {
 	fs := flag.NewFlagSet("test", flag.ContinueOnError)
 	args := []string{
 		"-invalidFlag",
@@ -216,4 +216,15 @@ func TestInvalidFlag(t *testing.T) {
 	if _, err := Load(fs, args); err == nil {
 		t.Errorf("expected error, got nil")
 	}
+}
+
+func TestLoad_InvalidConfig(t *testing.T) {
+	fs := flag.NewFlagSet("test", flag.ContinueOnError)
+	args := []string{"-batchSize=0"}
+
+	_, err := Load(fs, args)
+	if err == nil {
+		t.Errorf("expected error, got nil")
+	}
+
 }

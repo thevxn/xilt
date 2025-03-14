@@ -73,12 +73,16 @@ func Load(fs *flag.FlagSet, args []string) (*Config, error) {
 		}
 	}
 
+	if err := cfg.validate(); err != nil {
+		return nil, err
+	}
+
 	return cfg, nil
 }
 
-// Validate checks that the currently configured values make sense for continuing with log processing.
-// TODO: Validate file paths?
-func (cfg *Config) Validate() error {
+// validate checks that the currently configured values make sense for continuing with log processing.
+// TODO: validate file paths?
+func (cfg *Config) validate() error {
 	if cfg.MaxMemoryUsageMB <= 0 {
 		return fmt.Errorf("MaxMemoryUsageMB must be greater than 0. Got %d", cfg.MaxMemoryUsageMB)
 	}

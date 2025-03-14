@@ -27,19 +27,12 @@ func main() {
 	// Load config
 	cfg, err := config.Load(flag.CommandLine, os.Args[1:])
 	if err != nil {
-		log.Fatalln("error parsing flags and arguments:", err)
+		log.Fatalln("error loading config:", err)
 	}
 
 	l := logger.NewLogger(cfg.Verbose)
 
 	l.Debug("config loaded...")
-
-	// Validate that configured values make sense
-	if err := cfg.Validate(); err != nil {
-		log.Fatalln("invalid configuration: ", err)
-	}
-
-	l.Debug("config is valid...")
 
 	db := database.NewDB(l, cfg)
 	if err := db.Init(); err != nil {
