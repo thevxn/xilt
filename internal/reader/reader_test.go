@@ -1,7 +1,10 @@
 package reader
 
 import (
+	"errors"
+	"io/fs"
 	"os"
+	"runtime"
 	"testing"
 
 	"go.vxn.dev/xilt/internal/config"
@@ -70,5 +73,37 @@ func TestReadAndBatch_InvalidFile(t *testing.T) {
 	err := r.ReadAndBatch(batchChannel)
 	if err == nil {
 		t.Error("expected error, got nil")
+	}
+}
+
+func TestReadAndBatch_InsufficientFilePermissions(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		tmpFile, err := os.CreateTemp("", "restricted-file-*.txt")
+		if err != nil {
+			t.Errorf("error creating temp file: %v", err)
+		}
+		defer os.Remove(tmpFile.Name())
+
+		err = os.Chmod(tmpFile.Name(), 0000)
+		if err != nil {
+			t.Errorf("failed to set file permissions: %v", err)
+		}
+
+		logger := logger.NewLogger(false)
+		cfg := &config.Config{
+			InputFilePath: tmpFile.Name(),
+			BatchSize:     2,
+		}
+
+		r := NewReader(logger, cfg)
+
+		batchChannel := make(chan []string)
+
+		err = r.ReadAndBatch(batchChannel)
+		if err == nil {
+			t.Error("expected error, got nil")
+		} else if !errors.Is(err, fs.ErrPermission) {
+			t.Errorf("expected file permission error, got %v", err)
+		}
 	}
 }

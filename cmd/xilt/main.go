@@ -20,6 +20,12 @@ const (
 	reservedRoutines = 2
 )
 
+func getRoutineCount(cfg *config.Config) int {
+	// Max number of routines is equal to the maximum memory usage limit / the average size of a batch, taking into account the configured average log size and  batch size
+	// reservedRoutines are subtracted because one write routine is running concurrently and at the same time another batch is being put together by reading from the log file, which also has to be taken into account
+	return int(math.Max(1, math.Floor(float64(cfg.MaxMemoryUsageMB)/(cfg.AverageLogSizeMB*float64(cfg.BatchSize)))-reservedRoutines))
+}
+
 func main() {
 	// Start timer
 	start := time.Now()
@@ -54,16 +60,14 @@ func main() {
 	var batchWg sync.WaitGroup
 	var insertWg sync.WaitGroup
 
-	// Spin up routines to parse logs
-	// Max number of routines is equal to the maximum memory usage limit / the average size of a batch, taking into account the configured average log size and  batch size
-	// reservedRoutines are subtracted because one write routine is running concurrently and at the same time another batch is being put together by reading from the log file, which also has to be taken into account
-	routineCount := int(math.Max(1, math.Floor(float64(cfg.MaxMemoryUsageMB)/(cfg.AverageLogSizeMB*float64(cfg.BatchSize)))-reservedRoutines))
-
 	parser, err := parser.NewParser(l, nil)
 	if err != nil {
 		l.Println("error creating parser: ", err)
 		return
 	}
+
+	// Spin up routines to parse logs
+	routineCount := getRoutineCount(cfg)
 
 	l.Debugf("spinning up %d log parsing routines...", routineCount)
 
