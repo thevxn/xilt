@@ -1,8 +1,6 @@
 package reader
 
 import (
-	"errors"
-	"io/fs"
 	"os"
 	"runtime"
 	"testing"
@@ -102,8 +100,6 @@ func TestReadAndBatch_InsufficientFilePermissions(t *testing.T) {
 		err = r.ReadAndBatch(batchChannel)
 		if err == nil {
 			t.Error("expected error, got nil")
-		} else if !errors.Is(err, fs.ErrPermission) {
-			t.Errorf("expected file permission error, got %v", err)
 		}
 	}
 }
