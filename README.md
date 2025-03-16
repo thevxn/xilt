@@ -8,11 +8,15 @@ A utility for parsing Common and Combined Log Format (CLF) log files and storing
 
 ### Install
 
-`go install go.vxn.dev/xilt/cmd/xilt@latest`
+```sh
+go install go.vxn.dev/xilt/cmd/xilt@latest
+```
 
 ### Run
 
-`xilt [logFilePath] [dbFilePath]`
+```sh
+xilt [logFilePath] [dbFilePath]
+```
 
 - Default `logFilePath` = `./access.log`
 - Default `dbFilePath` = `./logs.db`
@@ -113,9 +117,11 @@ Using the default presets (`batchSize=5000`, `avgLogSize=0.001`, `maxMemUsage=10
 
 ## Build & Run Locally
 
-- `git clone https://github.com/thevxn/xilt`
-- `go build ./cmd/xilt`
-- `./xilt`
+```sh
+git clone https://github.com/thevxn/xilt
+go build ./cmd/xilt
+./xilt
+```
 
 ## TODO
 
