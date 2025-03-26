@@ -1,6 +1,7 @@
 # xilt
 
 [![Go Report Card](https://goreportcard.com/badge/go.vxn.dev/xilt)](https://goreportcard.com/report/go.vxn.dev/xilt) [![Go Reference](https://pkg.go.dev/badge/go.vxn.dev/xilt#readme-usage.svg)](https://pkg.go.dev/go.vxn.dev/xilt#readme-usage) [![Go Coverage](https://github.com/thevxn/xilt/wiki/coverage.svg)](https://raw.githack.com/wiki/thevxn/xilt/coverage.html)
+[![libs.tech recommends](https://libs.tech/project/946908111/badge.svg)](https://libs.tech/project/946908111/xilt)
 
 A utility for parsing Common and Combined Log Format (CLF) log files and storing them in SQLite for further analysis. Built with concurrency in mind.
 
