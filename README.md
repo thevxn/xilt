@@ -123,10 +123,3 @@ git clone https://github.com/thevxn/xilt
 go build ./cmd/xilt
 ./xilt
 ```
-
-## TODO
-
-- Add support for JSON logs
-- Add parsing of single params & create columns for each unique param found
-- Fine-tune max. memory usage parameter
-- Improve test coverage
